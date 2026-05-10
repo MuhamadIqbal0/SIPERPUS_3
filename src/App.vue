@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <!-- Navbar -->
-    <AppHeader/>
+    <AppHeader />
 
     <!-- Content -->
     <main>
@@ -12,7 +12,22 @@
 </template>
 
 <script setup>
-import AppHeader from './components/layout/AppHeader.vue';
+import { provide, ref, computed, readonly } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import AppHeader from './components/layout/AppHeader.vue'
+
+const authStore = useAuthStore()
+
+// ✅ Provide ke seluruh aplikasi
+provide('currentUser', readonly(computed(() => authStore.user)))
+provide('isLoggedIn', readonly(computed(() => authStore.isLoggedIn)))
+
+// ✅ Tema
+const tema = ref('light')
+provide('tema', readonly(tema))
+provide('toggleTema', () => {
+  tema.value = tema.value === 'light' ? 'dark' : 'light'
+})
 </script>
 
 <style>
